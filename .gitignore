@@ -1,0 +1,40 @@
+# environment variables
+.env
+.env.local
+.env.*.local
+
+# node modules
+node_modules/
+
+# logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# build folders
+dist/
+build/
+
+# coverage
+coverage/
+
+# backend uploads / recordings
+backend/uploads/
+backend/recordings/
+
+# frontend vite cache
+frontend/node_modules/
+frontend/dist/
+
+# backend node modules
+backend/node_modules/
