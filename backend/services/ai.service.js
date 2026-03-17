@@ -48,4 +48,86 @@ const generateResponse = async (userName, status, customMessage, callerNumber) =
   return mockResponses[status] || mockResponses.Busy;
 };
 
-module.exports = { generateResponse };
+/**
+ * Transcribes audio from a URL using OpenAI Whisper.
+ */
+const transcribeAudio = async (audioUrl) => {
+  if (!process.env.OPENAI_API_KEY) {
+    return "Mock transcription: The caller mentioned they want to discuss the project deadline.";
+  }
+
+  try {
+    const { default: OpenAI } = await import('openai');
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const axios = (await import('axios')).default;
+    const fs = await import('fs');
+    const path = await import('path');
+    const os = await import('os');
+
+    // Download file temporarily
+    const tempPath = path.join(os.tmpdir(), `recording-${Date.now()}.mp3`);
+    const response = await axios({
+      method: 'get',
+      url: audioUrl,
+      responseType: 'stream'
+    });
+
+    const writer = fs.createWriteStream(tempPath);
+    response.data.pipe(writer);
+
+    await new Promise((resolve, reject) => {
+      writer.on('finish', resolve);
+      writer.on('error', reject);
+    });
+
+    const transcription = await openai.audio.transcriptions.create({
+      file: fs.createReadStream(tempPath),
+      model: "whisper-1",
+    });
+
+    // Clean up
+    fs.unlinkSync(tempPath);
+
+    return transcription.text;
+  } catch (error) {
+    console.error('Transcription error:', error);
+    return "Could not transcribe audio.";
+  }
+};
+
+/**
+ * Generates a short summary of the transcribed text.
+ */
+const generateCallSummary = async (transcription) => {
+  if (!process.env.OPENAI_API_KEY) {
+    return transcription.split(' ').slice(0, 10).join(' ') + "...";
+  }
+
+  try {
+    const { default: OpenAI } = await import('openai');
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: 'Summarize the following voicemail transcription in one short sentence (under 15 words).'
+        },
+        {
+          role: 'user',
+          content: transcription
+        }
+      ],
+      max_tokens: 50,
+      temperature: 0.5
+    });
+
+    return completion.choices[0].message.content;
+  } catch (error) {
+    console.error('Summary error:', error);
+    return "Voicemail received.";
+  }
+};
+
+module.exports = { generateResponse, transcribeAudio, generateCallSummary };

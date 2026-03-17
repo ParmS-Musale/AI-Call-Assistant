@@ -8,6 +8,8 @@
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --brand-primary: #6366f1;
+  --brand-secondary: #8b5cf6;
 }
 
 /* ── Base ── */
@@ -28,49 +30,58 @@ body {
   transition: background-color var(--transition-base), color var(--transition-base);
 }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ── Custom Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
+
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
-::-webkit-scrollbar-thumb {
-  @apply bg-surface-300 dark:bg-surface-700 rounded-full;
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-surface-400 dark:bg-surface-600;
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
+
+.animate-fade-in { animation: fadeIn 400ms ease-out forwards; }
+.animate-slide-up { animation: slideUp 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-scale-in { animation: scaleIn 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* ── Glass Card ── */
 @layer components {
   .glass {
-    @apply bg-white/70 dark:bg-surface-800/60 backdrop-blur-xl border border-white/20 dark:border-surface-700/40;
+    @apply bg-white/70 dark:bg-surface-800/40 backdrop-blur-xl border border-white/20 dark:border-surface-700/30;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   }
 
   .glass-strong {
-    @apply bg-white/90 dark:bg-surface-800/80 backdrop-blur-2xl border border-white/30 dark:border-surface-700/50;
+    @apply bg-white/90 dark:bg-surface-900/80 backdrop-blur-2xl border border-white/30 dark:border-surface-700/50;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg;
   }
 
   /* ── Gradient backgrounds ── */
   .gradient-brand {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
   }
 
   .gradient-brand-subtle {
-    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 50%, #ede9fe 100%);
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
   }
 
   .dark .gradient-brand-subtle {
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #2e1065 100%);
-  }
-
-  /* ── Animated gradient background ── */
-  .animated-gradient {
-    background: linear-gradient(-45deg, #6366f1, #8b5cf6, #06b6d4, #3b82f6);
-    background-size: 400% 400%;
-    animation: gradient 8s ease infinite;
+    background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
   }
 
   /* ── Status colors ── */
@@ -81,12 +92,21 @@ body {
   .status-sleeping { @apply bg-violet-500; }
 }
 
-/* ── Focus ring ── */
-*:focus-visible {
-  @apply outline-none ring-2 ring-brand-500/50 ring-offset-2 dark:ring-offset-surface-900;
+/* ── Premium Scrollbar ── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-surface-200 dark:bg-surface-800 rounded-full transition-colors;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-brand-500/50;
 }
 
 /* ── Selection ── */
 ::selection {
-  @apply bg-brand-500/30;
+  @apply bg-brand-500/20 text-brand-900 dark:text-brand-100;
 }
