@@ -39,11 +39,11 @@ const generateResponse = async (userName, status, customMessage, callerNumber) =
 
   // Mock fallback
   const mockResponses = {
-    Busy: `Hi there! This is ${userName}'s AI assistant. ${userName} is currently busy and can't take your call right now. ${customMessage ? customMessage : 'Please leave a message after the tone and they will get back to you as soon as possible.'}`,
-    Playing: `Hey! ${userName} is taking a break right now. ${customMessage ? customMessage : "They'll return your call soon. Feel free to leave a message!"}`,
-    Driving: `Hello! ${userName} is driving at the moment and can't answer the phone for safety reasons. ${customMessage ? customMessage : "They'll call you back when they've safely stopped. Please leave a message."}`,
-    Sleeping: `Hi! ${userName} is resting right now. ${customMessage ? customMessage : "They'll get back to you when they wake up. You can leave a message after the tone."}`,
-    Available: `Hello! This is ${userName}'s AI assistant. They should be available shortly. Please hold on.`
+    Busy: customMessage ? customMessage : `Hi there! This is ${userName}'s AI assistant. ${userName} is currently busy and can't take your call right now. Please leave a message.`,
+    Playing: customMessage ? customMessage : `Hey! ${userName} is taking a break right now. Feel free to leave a message!`,
+    Driving: customMessage ? customMessage : `Hello! ${userName} is driving at the moment and can't answer. Please leave a message.`,
+    Sleeping: customMessage ? customMessage : `Hi! ${userName} is resting right now. You can leave a message.`,
+    Available: customMessage ? customMessage : `Hello! This is ${userName}'s AI assistant. They should be available shortly.`
   };
 
   return mockResponses[status] || mockResponses.Busy;
