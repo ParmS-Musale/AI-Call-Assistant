@@ -17,7 +17,9 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/user', require('./routes/user.routes'));
 app.use('/api/call-logs', require('./routes/calllog.routes'));
 app.use('/api/notifications', require('./routes/notification.routes'));
-app.use('/webhook', require('./routes/webhook.routes'));
+app.use('/api/webhook', require('./routes/webhook.routes')); // Added for simulator
+app.use('/webhook', require('./routes/webhook.routes')); 
+app.use('/api/gateway', require('./routes/gateway.routes')); // New Android Gateway
 
 // Health check
 app.get('/api/health', (req, res) => {

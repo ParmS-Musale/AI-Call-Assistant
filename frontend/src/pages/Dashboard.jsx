@@ -4,21 +4,20 @@ import api from '../services/api';
 import Card from '../components/ui/Card';
 import StatusBadge from '../components/ui/StatusBadge';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import CallSimulator from '../components/dashboard/CallSimulator';
 import {
   Phone,
   PhoneMissed,
   Voicemail,
   ShieldAlert,
   Activity,
-  Clock,
-  User,
   Smile,
   Car,
   Moon,
   Briefcase,
 } from 'lucide-react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart,
+  XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart,
 } from 'recharts';
 
 const statusConfig = [
@@ -77,13 +76,19 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto animate-fade-in">
       {/* Header */}
-      <div className="animate-slide-up">
-        <h1 className="text-2xl font-bold text-surface-900 dark:text-white">
-          Welcome back, {user?.name?.split(' ')[0]} 👋
-        </h1>
-        <p className="text-surface-500 dark:text-surface-400 mt-1">
-          Here's what's happening with your calls today
-        </p>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 animate-slide-up">
+        <div>
+          <h1 className="text-2xl font-bold text-surface-900 dark:text-white">
+            Welcome back, {user?.name?.split(' ')[0]} 👋
+          </h1>
+          <p className="text-surface-500 dark:text-surface-400 mt-1">
+            Here's what's happening with your calls today
+          </p>
+        </div>
+        
+        <div className="w-full md:w-auto min-w-[320px]">
+          <CallSimulator />
+        </div>
       </div>
 
       {/* Status Toggle */}

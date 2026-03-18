@@ -103,6 +103,52 @@ Open `http://localhost:5173` and use the demo credentials:
 |-------|----------|
 | `demo@aicall.com` | `demo123` |
 
+## 4. Android Gateway Setup (Jugaad / No Twilio Required)
+
+Instead of paying for Twilio ISD or virtual numbers, you can use your **existing Android phone** to detect missed calls and send AI-powered SMS responses automatically.
+
+### Prerequisites
+1. An Android phone with an active SIM card.
+2. The **MacroDroid** app installed from the Google Play Store.
+3. Your backend server running locally and exposed to the internet via **Ngrok**.
+
+### Step 1: Expose Backend via Ngrok
+Run ngrok to get a public URL for your local backend (port 5000):
+```bash
+ngrok http 5000
+```
+*Note the Forwarding URL (e.g., `https://1234-abcd.ngrok-free.app`).*
+
+### Step 2: Get Your User ID
+You need to pass your `userId` to the backend so the AI knows who is receiving the call and what their current status is. You can find this in MongoDB or via your logged-in session. For the demo user (`Parmeshwar Musale`), it is typically `69b829682a48fd5ad671caef` or similar.
+
+### Step 3: Configure MacroDroid
+1. **Enable System Permissions**: Open MacroDroid, go to Settings -> `Accessibility` and grant the needed permissions, including "Display over other apps". Ensure the master switch on the Home Screen is ON.
+2. **Create New Macro**: Tap **Add Macro** and name it "AI Call Assistant".
+3. **Add Trigger (Call Missed)**:
+   - Tap `+` under Triggers -> `Call/SMS` -> `Call Missed`.
+   - Select `Any Number`.
+4. **Add Action 1 (HTTP Request)**:
+   - Tap `+` under Actions -> `Applications` -> `HTTP Request`.
+   - **Request Method**: `POST`
+   - **URL**: `https://<YOUR-NGROK-URL>/api/gateway/incoming-call` *(Replace with your actual Ngrok URL)*.
+   - **Content Body**: Select `JSON` and enter:
+     ```json
+     {
+       "callerNumber": "[call_number]",
+       "userId": "<YOUR-USER-ID>"
+     }
+     ```
+   - Tick the box for **"Block next actions until complete"**.
+   - Under checking response, choose **"Save HTTP response in string variable"** and create a temporary variable `ai_resp`.
+5. **Add Action 2 (Send SMS)**:
+   - Tap `+` under Actions -> `Messaging` -> `Send SMS`.
+   - **Select Contact**: `[call_number]` (From local variables).
+   - **Message text**: `[v=ai_resp]`
+6. **Save**: Tap the Checkmark (✔) to save the Macro.
+
+Now, whenever you miss a call or reject a call, your Android phone will fetch an AI response based on your current status (e.g., Sleeping, Driving) and send it as an SMS!
+
 ## API Endpoints
 
 | Method | Endpoint | Auth | Description |

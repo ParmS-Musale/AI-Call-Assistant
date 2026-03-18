@@ -19,7 +19,8 @@ const generateResponse = async (userName, status, customMessage, callerNumber) =
                       The user is currently "${status}". 
                       Their custom message for this status is: "${customMessage}".
                       Generate a brief, natural-sounding voice response for an incoming call.
-                      Keep it under 3 sentences. Be warm and professional.`
+                      Keep it under 3 sentences. Be warm and professional.
+                      If the custom message is in a language like Hindi or Marathi, generate the entire response in that language.`
           },
           {
             role: 'user',
