@@ -8,7 +8,7 @@ const { generateResponse } = require('../services/ai.service');
 // Triggered by Android Automation (e.g., MacroDroid) when a call is received
 router.post('/incoming-call', async (req, res) => {
   try {
-    const { callerNumber, userId } = req.body;
+    const { callerNumber, callerName, userId } = req.body;
     
     // Find user by ID if provided, otherwise fallback to the first user
     let user;
@@ -35,8 +35,8 @@ router.post('/incoming-call', async (req, res) => {
     // Log the event as an 'SMS Reply' call type
     await CallLog.create({
       userId: user._id,
-      callerNumber: callerNumber || 'Unknown',
-      callerName: 'Call (Auto-SMS)',
+      callerNumber: callerNumber || 'Unknown Number',
+      callerName: callerName || 'Unknown Contact',
       aiResponse,
       callType: 'answered', // Or create a new type if preferred
       userStatusDuringCall: user.status
