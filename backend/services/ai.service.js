@@ -4,6 +4,8 @@
  */
 
 const generateResponse = async (userName, status, customMessage, callerNumber) => {
+  const cleanMsg = customMessage ? customMessage.trim() : '';
+
   // If OpenAI key is configured, use the real API
   if (process.env.OPENAI_API_KEY) {
     try {
@@ -17,7 +19,7 @@ const generateResponse = async (userName, status, customMessage, callerNumber) =
             role: 'system',
             content: `You are a polite and professional AI call assistant for ${userName}. 
                       The user is currently "${status}". 
-                      Their custom message for this status is: "${customMessage}".
+                      Their custom message for this status is: "${cleanMsg}".
                       Generate a brief, natural-sounding voice response for an incoming call.
                       Keep it under 3 sentences. Be warm and professional.
                       If the custom message is in a language like Hindi or Marathi, generate the entire response in that language.`
@@ -39,11 +41,11 @@ const generateResponse = async (userName, status, customMessage, callerNumber) =
 
   // Mock fallback
   const mockResponses = {
-    Busy: customMessage ? customMessage : `Hi there! This is ${userName}'s AI assistant. ${userName} is currently busy and can't take your call right now. Please leave a message.`,
-    Playing: customMessage ? customMessage : `Hey! ${userName} is taking a break right now. Feel free to leave a message!`,
-    Driving: customMessage ? customMessage : `Hello! ${userName} is driving at the moment and can't answer. Please leave a message.`,
-    Sleeping: customMessage ? customMessage : `Hi! ${userName} is resting right now. You can leave a message.`,
-    Available: customMessage ? customMessage : `Hello! This is ${userName}'s AI assistant. They should be available shortly.`
+    Busy: cleanMsg ? cleanMsg : `Hi there! This is ${userName}'s AI assistant. ${userName} is currently busy and can't take your call right now. Please leave a message.`,
+    Playing: cleanMsg ? cleanMsg : `Hey! ${userName} is taking a break right now. Feel free to leave a message!`,
+    Driving: cleanMsg ? cleanMsg : `Hello! ${userName} is driving at the moment and can't answer. Please leave a message.`,
+    Sleeping: cleanMsg ? cleanMsg : `Hi! ${userName} is resting right now. You can leave a message.`,
+    Available: cleanMsg ? cleanMsg : `Hello! This is ${userName}'s AI assistant. They should be available shortly.`
   };
 
   return mockResponses[status] || mockResponses.Busy;
