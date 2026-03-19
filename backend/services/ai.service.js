@@ -42,9 +42,9 @@ const generateResponse = async (userName, status, customMessage, callerNumber) =
   // Mock fallback
   const mockResponses = {
     Busy: cleanMsg ? cleanMsg : `Hi there! This is ${userName}'s AI assistant. ${userName} is currently busy and can't take your call right now. Please leave a message.`,
-    Playing: cleanMsg ? cleanMsg : `Hey! ${userName} is taking a break right now. Feel free to leave a message!`,
-    Driving: cleanMsg ? cleanMsg : `Hello! ${userName} is driving at the moment and can't answer. Please leave a message.`,
-    Sleeping: cleanMsg ? cleanMsg : `Hi! ${userName} is resting right now. You can leave a message.`,
+    Playing: cleanMsg ? cleanMsg : `Hey there! This is ${userName}'s AI assistant. ${userName} is Currently doing batting right now. Feel free to leave a message!`,
+    Driving: cleanMsg ? cleanMsg : `Hello! This is ${userName}'s AI assistant. ${userName} is driving at the moment and can't answer. Please leave a message.`,
+    Sleeping: cleanMsg ? cleanMsg : `Hi! This is ${userName}'s AI assistant. ${userName} is resting right now. You can leave a message.`,
     Available: cleanMsg ? cleanMsg : `Hello! This is ${userName}'s AI assistant. They should be available shortly.`
   };
 
