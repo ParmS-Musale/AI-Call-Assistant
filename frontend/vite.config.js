@@ -10,7 +10,7 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'AI Call Assistant',
-        short_name: 'AI Call',
+        short_name: 'Parm Assistant',
         description: 'AI-powered smart assistant for missed calls.',
         theme_color: '#6366f1',
         icons: [
